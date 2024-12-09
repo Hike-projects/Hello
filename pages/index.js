@@ -1,23 +1,51 @@
 // pages/index.js
 import Head from 'next/head';
+import { useState } from 'react';
 
 export default function Home() {
+    const [hoveredLink, setHoveredLink] = useState(null);
+
+    const handleMouseEnter = (index) => {
+        setHoveredLink(index);
+    };
+
+    const handleMouseLeave = () => {
+        setHoveredLink(null);
+    };
+
     return (
         <>
             <Head>
-                <title>My Links</title>
+                <title>My Linktree</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
             <div style={styles.container}>
-                <div style={styles.card}>
-                    <h1 style={styles.title}>Welcome to My Links</h1>
-                    <p style={styles.subtitle}>Connect with me on the platforms below:</p>
-                    <div style={styles.links}>
-                        <a style={styles.link} href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
-                        <a style={styles.link} href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
-                        <a style={styles.link} href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
-                        <a style={styles.link} href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    </div>
+                <div style={styles.profile}>
+                    <img
+                        src="https://via.placeholder.com/100" // Replace with your profile image URL
+                        alt="Profile"
+                        style={styles.avatar}
+                    />
+                    <h1 style={styles.name}>Your Name</h1>
+                    <p style={styles.bio}>A short description about yourself or your work.</p>
+                </div>
+                <div style={styles.links}>
+                    {['Facebook', 'Instagram', 'Twitter', 'GitHub'].map((link, index) => (
+                        <a
+                            key={link}
+                            style={{
+                                ...styles.link,
+                                ...(hoveredLink === index && styles.linkHover),
+                            }}
+                            href={`https://${link.toLowerCase()}.com`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onMouseEnter={() => handleMouseEnter(index)}
+                            onMouseLeave={handleMouseLeave}
+                        >
+                            {link}
+                        </a>
+                    ))}
                 </div>
             </div>
         </>
@@ -27,37 +55,55 @@ export default function Home() {
 const styles = {
     container: {
         display: 'flex',
-        justifyContent: 'center',
+        flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'center',
         height: '100vh',
-        background: 'linear-gradient(145deg, rgba(255,255,255,0.8), rgba(200,200,255,0.8))',
+        background: 'linear-gradient(145deg, #f3f4f6, #e5e7eb)',
         fontFamily: 'Arial, sans-serif',
+        padding: '20px',
     },
-    card: {
+    profile: {
         textAlign: 'center',
-        background: 'rgba(255, 255, 255, 0.9)',
-        padding: '20px 40px',
-        borderRadius: '15px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        marginBottom: '30px',
     },
-    title: {
+    avatar: {
+        width: '100px',
+        height: '100px',
+        borderRadius: '50%',
+        marginBottom: '15px',
+        border: '3px solid #ddd',
+    },
+    name: {
         fontSize: '24px',
-        margin: '10px 0',
+        fontWeight: 'bold',
+        margin: '5px 0',
     },
-    subtitle: {
+    bio: {
         fontSize: '16px',
-        margin: '10px 0 20px',
         color: '#555',
     },
     links: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '10px',
+        gap: '15px',
+        width: '100%',
+        maxWidth: '400px',
     },
     link: {
-        color: '#0070f3',
         textDecoration: 'none',
+        textAlign: 'center',
         fontSize: '18px',
-        transition: 'color 0.3s',
+        fontWeight: 'bold',
+        color: '#fff',
+        background: '#10b981',
+        padding: '15px 20px',
+        borderRadius: '8px',
+        transition: 'transform 0.2s, background 0.2s',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    },
+    linkHover: {
+        background: '#059669',
+        transform: 'scale(1.05)',
     },
 };
